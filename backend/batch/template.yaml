@@ -21,10 +21,10 @@ Parameters:
 Mappings:
   EnvironmentMap:
     dev:
-      LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBName
-      EventBridgeName: EventBridgeName
-      LayerVersion: LayerVersion
-      LoggerLevel: DEBUG or INFO
+      LINEChannelAccessTokenDBName: LINEChannelAccessTokenTBL
+      EventBridgeName: AmplifyEventBridgeName
+      LayerVersion: 1
+      LoggerLevel: DEBUG
     prod:
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBName
       EventBridgeName: EventBridgeName

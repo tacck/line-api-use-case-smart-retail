@@ -1,2 +1,4 @@
 line-bot-sdk==1.17.0
-line-pay
+requests
+paypayopa>=1.0.4
+polling==0.3.1

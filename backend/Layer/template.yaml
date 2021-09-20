@@ -20,7 +20,7 @@ Parameters:
 Mappings:
   EnvironmentMap:
     dev:
-      LayerName: LayerName
+      LayerName: LINE-USECASE-SMARTRETAIL-LAYER-DEV
     prod:
       LayerName: LayerName
 

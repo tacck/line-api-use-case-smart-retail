@@ -18,7 +18,7 @@ class SmartRegisterOrderInfo(DynamoDB):
 
     def __init__(self):
         """初期化メソッド"""
-        table_name = os.environ.get("LINE_PAY_ORDER_INFO_DB")
+        table_name = os.environ.get("PAY_PAY_ORDER_INFO_DB")
         super().__init__(table_name)
         self._table = self._db.Table(table_name)
 
