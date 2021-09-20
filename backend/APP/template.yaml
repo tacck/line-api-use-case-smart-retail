@@ -7,7 +7,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 300
+    Timeout: 30
     MemorySize: 128
 
 Parameters:
@@ -38,7 +38,7 @@ Mappings:
       LoggerLevel: DEBUG
       LambdaMemorySize: 128
       # TTL is True:Reservation Data will be deleted at the specified date, False:Data will not be deleted
-      TTL: True 
+      TTL: False 
       TTLDay: 1
       # ### ACCESS LOG SETTING ###
       # LogS3Bucket: S3BucketName for AccessLog

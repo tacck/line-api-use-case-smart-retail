@@ -22,7 +22,7 @@ Mappings:
   EnvironmentMap:
     dev:
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenTBL
-      EventBridgeName: AmplifyEventBridgeName
+      EventBridgeName: AmplifyEventBridge
       LayerVersion: 1
       LoggerLevel: DEBUG
     prod:
