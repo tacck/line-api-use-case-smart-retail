@@ -16,7 +16,7 @@
                     <v-divider class="mt-1 mb-5"></v-divider>
                     <p><!-- またのご利用をお待ちしております。 -->{{ $t("completed.msg003") }}</p>
                     <div>
-                        <v-img width="85" v-bind:src="images.linepay" alt="LINE Pay"></v-img>
+                        <v-img width="85" v-bind:src="images.paypay" alt="PayPay"></v-img>
                     </div>
                     <v-btn color="#00ba00" class="white--text ma-5" width="200px" v-on:click="back">
                         <v-icon>house</v-icon><span>&nbsp;<!-- TOPへ戻る -->{{ $t("completed.msg004") }}</span>
@@ -55,20 +55,20 @@ export default {
             return {
                 liffId: liffId,
                 successed: successed,
-            };        
-        } 
+            };
+        }
 
         // エラーメッセージ
-        let _i18n = app.i18n.messages[store.state.locale];            
+        let _i18n = app.i18n.messages[store.state.locale];
         const message = (text) => {
-            app.$popup.show("error", _i18n.completed.error, text); // "LINE Pay 支払"
+            app.$popup.show("error", _i18n.completed.error, text); // "PayPay 支払"
         };
 
         // 連続確定処理3秒未満確認
         let intervaled = true;
         const accessTime = store.state.completed;
         if (accessTime) {
-            const interval = app.$utils.dateFormat(app.$utils.addSeconds(accessTime, 3), "yyyy/mm/dd hh:mi:ss"); 
+            const interval = app.$utils.dateFormat(app.$utils.addSeconds(accessTime, 3), "yyyy/mm/dd hh:mi:ss");
             const now = app.$utils.dateFormat(new Date(), "yyyy/mm/dd hh:mi:ss");
             if (interval > now) {
                 intervaled = false;
@@ -79,18 +79,21 @@ export default {
             // 支払確定時刻
             const completedTime = app.$utils.dateFormat(new Date(), "yyyy/mm/dd hh:mi:ss");
             store.commit("completed", completedTime);
-            // LINE Pay 支払い確定処理
+            // PayPay 支払い確定処理
             try {
-                const response = await app.$smaphregi.confirmPayment(transactionId, orderId);
-                if (response && ("returnCode" in response)) {
-                    if (response.returnCode == "0000") {
+                const response = await app.$smaphregi.confirmPayPayment(transactionId, orderId);
+                console.log("kawamoto_f_1")
+                console.log(response)
+                console.log(response.data)
+                if (response.data && ("status" in response.data)) {
+                    if (response.data.status == "COMPLETED") {
                         successed = true;
                     } else {
-                        // "LINE Pay 支払い確定処理に失敗しました。  Return Code: {returnCode}"
+                        // "PayPay 支払い確定処理に失敗しました。  Return Code: {returnCode}"
                         message(_i18n.completed.error01.replace("{returnCode}", response.returnCode));
                     }
                 } else {
-                    // "LINE Pay 支払い確定処理に失敗しました。  Transaction ID: {transactionId}  Order ID: {orderId}"
+                    // "PayPay 支払い確定処理に失敗しました。  Transaction ID: {transactionId}  Order ID: {orderId}"
                     message(_i18n.completed.error02.replace("{transactionId}", transactionId).replace("{orderId}", orderId));
                 }
             } catch (error) {
@@ -116,7 +119,7 @@ export default {
             liffId: null,
             successed: false,
             images: {
-                linepay: require("~/assets/img/line_pay2.png"),
+                paypay: require("~/assets/img/paypay.png"),
                 thanks: "https://media.gettyimages.com/vectors/payment-from-smartphone-to-pos-terminal-using-nfc-technology-vector-id1131959835?s=2048x2048",
             },
         }
@@ -164,7 +167,7 @@ export default {
     text-shadow: 1px 1px 2px #fff;
     z-index: 1;
     width: 100%;
-    bottom: 10px;    
+    bottom: 10px;
 }
 .staff-image {
     position: absolute;

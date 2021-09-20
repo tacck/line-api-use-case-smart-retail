@@ -32,7 +32,7 @@
         "msg013": "購入する",
         "msg014": "（税込）",
         "msg015": "商品をご確認の上<br/>[ 購入する ] ボタンを押してください。",
-        "msg016": "LINE Pay を呼び出しています..",
+        "msg016": "PayPay を呼び出しています..",
         "msg017": "決済処理を行っています..",
         "error01" : "認識しない商品です",
         "error02" : "読取りに失敗しました",
@@ -46,9 +46,9 @@
         "msg002": "決済が完了しました。",
         "msg003": "またのご利用をお待ちしております。",
         "msg004": "TOPへ戻る",
-        "error": "LINE Pay 支払",
-        "error01": "LINE Pay 支払い確定処理に失敗しました。<br/><br/>Return Code: {returnCode}",
-        "error02": "LINE Pay 支払い確定処理に失敗しました。<br/><br/>Transaction ID: {transactionId}<br/><br/>Order ID: {orderId}",
+        "error": "PayPay 支払",
+        "error01": "PayPay 支払い確定処理に失敗しました。<br/><br/>Return Code: {returnCode}",
+        "error02": "PayPay 支払い確定処理に失敗しました。<br/><br/>Transaction ID: {transactionId}<br/><br/>Order ID: {orderId}",
         "error03": "{message}<br/><br/>支払い確定の通信に失敗しました。"
     },
     "history": {

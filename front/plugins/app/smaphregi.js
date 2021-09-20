@@ -5,9 +5,9 @@
  * @param {Object} app
  * @param {Object} store
  * @param {Object} env
- * @return {VueSmaphregi} 
+ * @return {VueSmaphregi}
  */
-const VueSmaphregi = ($axios, app, store, redirect, env) => {
+ const VueSmaphregi = ($axios, app, store, redirect, env) => {
     /** @type {string} 通信モジュール */
     const _module = env.AJAX_MODULE ? env.AJAX_MODULE : "axios";
     /** @type {string} APIGatewayステージ名 */
@@ -78,7 +78,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
          *
          * @param {string} barcode IDトークン
          * @param {string} orderId オーダーID
-         * @return {string} LINE Pay URL
+         * @return {string} PayPay URL
          */
          async makePayment(idToken, orderId) {
             let ret = false;
@@ -87,10 +87,34 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
             let data = await this[_module].payment(idToken, orderId);
             if (!data) { return ret; }
 
-            // LINE Pay 決済画面URL取得
+            // PayPay 決済画面URL取得
             try {
                 if (data.info.paymentUrl.web) {
                     ret = data.info.paymentUrl.web;
+                }
+            } catch (ex) {}
+
+            return ret;
+        },
+
+        /**
+         * 商品決済処理
+         *
+         * @param {string} barcode IDトークン
+         * @param {string} orderId オーダーID
+         * @return {string} PayPay URL
+         */
+         async makePayPayment(idToken, orderId) {
+            let ret = false;
+
+            // Lambdaアクセス
+            let data = await this[_module].paypayment(idToken, orderId);
+            if (!data) { return ret; }
+
+            // PayPay 決済画面URL取得
+            try {
+                if (data.data.url) {
+                    ret = data.data.url;
                 }
             } catch (ex) {}
 
@@ -109,6 +133,27 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
 
             // Lambdaアクセス
             let data = await this[_module].paymentConfirmed(transactionId, orderId);
+            if (!data) { return ret; }
+
+            // HTTP 200 Return
+            ret = data;
+
+            return ret;
+        },
+
+        /**
+         * 商品決済確定処理(PayPay)
+         *
+         * @param {string} transactionId トランザクションID
+         * @param {string} orderId オーダーID
+         * @return {Object} 決済確定情報
+         */
+         async confirmPayPayment(transactionId, orderId) {
+            let ret = false;
+
+            // Lambdaアクセス
+            let data = await this[_module].paypaymentConfirmed(transactionId, orderId);
+            console.log(data)
             if (!data) { return ret; }
 
             // HTTP 200 Return
@@ -225,7 +270,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
              */
             sumItems(items, scanItem=null) {
                 let ret = [];
-    
+
                 let map = {};
                 for (const item of items) {
                     if (!(item.barcode in map)) {
@@ -297,7 +342,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                 if (scanItem) {
                     ret.push(createRecord(scanItem.barcode, map));
                 }
-    
+
                 return ret;
             },
 
@@ -360,13 +405,13 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
              */
              discount(price, method, rate) {
                 let ret = price;
-    
+
                 if (method == 1) {
                     ret = Math.floor(price * (100 - rate) / 100);
                 } else if (method == 2) {
                     ret = price - rate;
                 }
-    
+
                 return (ret > 0 ? ret : 0);
             },
 
@@ -380,7 +425,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
              discountByCoupon(price, coupon) {
                 return this.discount(price, coupon.method, coupon.rate);
             },
-            
+
             /**
              *　値引種別ラベル
              *
@@ -396,7 +441,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                 } else if (method == 2) {
                     ret = `${rate}円引き`;
                 }
-    
+
                 return ret;
             },
 
@@ -407,7 +452,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
              * @return {string} 値引種別文言
              */
              discountLabelByCoupon(coupon) {
-                return this.discountLabel(coupon.method, coupon.rate);                
+                return this.discountLabel(coupon.method, coupon.rate);
             },
 
             /**
@@ -493,7 +538,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
              */
             showError(error) {
                 const message = _i18n.error.msg001;
-                return app.$utils.showHttpError(error, message);          
+                return app.$utils.showHttpError(error, message);
             },
 
             /**
@@ -513,12 +558,12 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                 const bottom = element.scrollHeight - element.clientHeight;
                 window.scroll(0, bottom);
             },
-    
+
             /**
              * Storage読み込み
              *
              * @param {string} name ストレージ要素名
-             * @return {any} 値 
+             * @return {any} 値
              */
             readStore(name) {
                 let smaphregi = app.$utils.ocopy(store.state.smaphregi);
@@ -594,13 +639,13 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
             },
 
             /**
-             * LINE Pay決済API
+             * PayPay決済API
              *
              * @param {string} idToken IDトークン
              * @param {string} orderId オーダーID
              * @return {Object} APIレスポンス内容
              */
-             payment: async(idToken, orderId) => {
+             paypayment: async(idToken, orderId) => {
                 // 送信パラメーター
                 const params = {
                     locale: store.state.locale,
@@ -608,18 +653,18 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                     orderId: orderId,
                 }
                 // POST送信
-                const response = await $axios.post(`${_stage}/put_linepay_request`, params);
+                const response = await $axios.post(`${_stage}/put_paypay_request`, params);
                 return response.status==200 ? response.data : null;
             },
 
             /**
-             * 商品決済確定API
+             * 商品決済確定API(PayPay)
              *
              * @param {string} transactionId トランザクションID
              * @param {string} orderId オーダーID
              * @return {Object} APIレスポンス内容
              */
-             paymentConfirmed: async(transactionId, orderId) => {
+             paypaymentConfirmed: async(transactionId, orderId) => {
                 // 送信パラメーター
                 const params = {
                     locale: store.state.locale,
@@ -627,7 +672,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                     orderId: orderId,
                 }
                 // POST送信
-                const response = await $axios.post(`${_stage}/put_linepay_confirm`, params);
+                const response = await $axios.post(`${_stage}/put_paypay_detail`, params);
                 return response.status==200 ? response.data : null;
             },
 
@@ -730,40 +775,32 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
             },
 
             /**
-             * LINE Pay決済API
+             * PayPay決済API
              *
              * @param {string} idToken IDトークン
              * @param {string} orderId オーダーID
              * @return {Object} APIレスポンス内容
              */
-             payment: async(idToken, orderId) => {
-                let response = null;
+             paypayment: async(idToken, orderId) => {
                 // 送信パラメーター
-                const myInit = {
-                    body: {
-                        locale: store.state.locale,
-                        idToken: idToken,
-                        orderId: orderId,
-                    }
-                };
-                // POST送信
-                try {
-                    response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/put_linepay_request`, myInit);
-                } catch (error) {
-                    app.$smaphregi.utils.showError(error);
+                const params = {
+                    locale: store.state.locale,
+                    idToken: idToken,
+                    orderId: orderId,
                 }
-
-                return response;
+                // POST送信
+                const response = await $axios.post(`${_stage}/put_paypay_request`, params);
+                return response.status==200 ? response.data : null;
             },
 
             /**
-             * 商品決済確定API
+             * 商品決済確定API(PayPay)
              *
              * @param {string} transactionId トランザクションID
              * @param {string} orderId オーダーID
              * @return {Object} APIレスポンス内容
              */
-             paymentConfirmed: async(transactionId, orderId) => {
+             paypaymentConfirmed: async(transactionId, orderId) => {
                 let response = null;
                 // 送信パラメーター
                 const myInit = {
@@ -775,7 +812,7 @@ const VueSmaphregi = ($axios, app, store, redirect, env) => {
                 };
                 // POST送信
                 try {
-                    response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/put_linepay_confirm`, myInit);
+                    response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/put_paypay_detail`, myInit);
                 } catch (error) {
                     app.$smaphregi.utils.showError(error);
                 }

@@ -1,0 +1,24 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd front
+        - npm install
+        - echo "LIFF_ID=$LIFF_ID" >> .env
+        - echo "BASE_URL=$BASE_URL" >> .env
+        - echo "APIGATEWAY_STAGE=$APIGATEWAY_STAGE" >> .env
+        - echo "AJAX_MODULE=$AJAX_MODULE" >> .env
+        - echo "SCANNER_MODULE=$SCANNER_MODULE" >> .env
+        - echo "SCANDIT_LICENSE=$SCANDIT_LICENSE" >> .env
+    build:
+      commands:
+        - npm run build
+        - cat .env
+  artifacts:
+    # IMPORTANT - Please verify your build output directory
+    baseDirectory: front/dist
+    files:
+      - '**/*'
+  cache:
+    paths: []
