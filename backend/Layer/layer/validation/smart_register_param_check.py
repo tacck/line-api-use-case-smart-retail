@@ -24,12 +24,12 @@ class SmartRegisterParamCheck(ParamCheck):
 
         return self.error_msg
 
-    def check_api_put_linepay_request(self):
+    def check_api_put_paypay_request(self):
         self.check_order_id()
 
         return self.error_msg
 
-    def check_api_put_linepay_confirm(self):
+    def check_api_put_paypay_confirm(self):
         self.check_transaction_id()
         self.check_order_id()
 

@@ -130,7 +130,7 @@
                         <div v-if="totalPrice > 0">
                             <span style="text-decoration:line-through;">¥{{ totalPrice.toLocaleString() }}</span>
                             ⇒
-                            <span style="color:#f70000;">¥{{ totalDiscountPrice.toLocaleString() }}</span> 
+                            <span style="color:#f70000;">¥{{ totalDiscountPrice.toLocaleString() }}</span>
                             <span class="tax"><!-- (税込み) -->{{ $t("register.msg012") }}</span>
                         </div>
                         <div v-else>
@@ -208,7 +208,7 @@ export default {
         // カート内商品取得
         let storage = app.$smaphregi.utils.readStore("cart");
         if (storage) {
-            items = app.$smaphregi.utils.sumItems(storage);            
+            items = app.$smaphregi.utils.sumItems(storage);
         }
         // カメラ起動オプション取得
         const startCamera = app.$flash.get("camera") ? true : false;
@@ -348,7 +348,7 @@ export default {
             if (this.$smaphregi.utils.withCoupon("*")) {
                 const coupon = this.$smaphregi.utils.getCoupon("*");
                 price = this.$smaphregi.utils.discount(price, coupon.method, coupon.rate);
-            }        
+            }
 
             return price;
         },
@@ -365,7 +365,7 @@ export default {
                     ret = true;
                 }
             }
-            return ret; 
+            return ret;
         },
         // クーポン期間プロパティ
         couponPeriod() {
@@ -471,9 +471,9 @@ export default {
             const items = this.items;
             const coupons = this.$smaphregi.utils.readStore("coupons");
 
-            let waitingMsg = this.$t("register.msg016"); // "LINE Pay を呼び出しています.."
+            let waitingMsg = this.$t("register.msg016"); // "PayPay を呼び出しています.."
             if (this.totalDiscountPrice == 0) { waitingMsg = this.$t("register.msg017"); } // "決済処理を行っています.."
-            this.$processing.show(0, waitingMsg); 
+            this.$processing.show(0, waitingMsg);
 
             // サーバー側カートに購入商品情報配置
             let orderId = this.$smaphregi.utils.readStore("orderId");
@@ -484,8 +484,8 @@ export default {
                     // 決済判定
                     if (orderId) {
                         this.$smaphregi.utils.writeStore("orderId", orderId);
-                        // LINE Pay 決済
-                        const url = await this.$smaphregi.makePayment(idToken, orderId);
+                        // PayPay 決済
+                        const url = await this.$smaphregi.makePayPayment(idToken, orderId);
                         if (url) {
                             window.location = url;
                         }
@@ -691,7 +691,7 @@ export default {
             this.errorDialog.showed = true;
             setTimeout(() => { this.error = false; }, 2500);
             clearTimeout(this.errorDialog.handle);
-            this.errorDialog.handle = setTimeout(() => { 
+            this.errorDialog.handle = setTimeout(() => {
                 this.errorDialog.showed = false;
             }, 3000);
         },
@@ -741,7 +741,7 @@ export default {
     text-shadow: 1px 1px 2px #fff;
     z-index: 1;
     width: 100%;
-    bottom: 10px;    
+    bottom: 10px;
 }
 .staff-image {
     position: absolute;
@@ -911,7 +911,7 @@ export default {
     width: 20%;
     margin: auto;
     padding: 0;
-    overflow: hidden;    
+    overflow: hidden;
 }
 .product .name {
     position: relative;
@@ -925,7 +925,7 @@ export default {
     bottom: 28px;
     text-align: left;
     margin: 0 0 0 8px;
-    font-size: 0.9em;    
+    font-size: 0.9em;
 }
 .product .barcode {
     position: absolute;
@@ -983,14 +983,14 @@ export default {
 }
 .caution span {
     font-weight: bold;
-    text-shadow: 1px 1px 2px #fff;    
+    text-shadow: 1px 1px 2px #fff;
 }
 .caution-close {
     position: absolute;
     right: 0;
     top: 0;
     margin: 0;
-    cursor: pointer;    
+    cursor: pointer;
 }
 @media screen and (min-width:360px) {
     .caution {
@@ -1105,14 +1105,14 @@ export default {
     padding: 0 3px;
     font-size: 1.0em;
     font-weight: bold;
-    white-space: normal;   
+    white-space: normal;
 }
 .dialog .description .price {
     position: absolute;
     right: 0;
     bottom: 0;
     font-size: 1.0em;
-    font-weight: bold;    
+    font-weight: bold;
 }
 .dialog .description .price .discount {
     color: #f70000;
