@@ -15,9 +15,6 @@ export default {
     },
     created() {
         this.initVconsole()
-        console.log('created start')
-        console.log(this.$route.query['transactionId'])
-        console.log(this.$route.query['orderId'])
         if ("transactionId" in this.$route.query && "orderId") {
             // トランザクションID取得
             const transactionId = this.$route.query['transactionId']
@@ -39,7 +36,6 @@ export default {
             // 商品履歴画面へ遷移
             this.gotoHistory(orderId, loginRedirectUrl);
         }
-        console.log('created end')
     },
     mounted() {
         //this.initVconsole()

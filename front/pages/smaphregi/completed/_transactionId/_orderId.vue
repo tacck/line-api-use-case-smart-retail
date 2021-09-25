@@ -82,9 +82,6 @@ export default {
             // PayPay 支払い確定処理
             try {
                 const response = await app.$smaphregi.confirmPayPayment(transactionId, orderId);
-                console.log("kawamoto_f_1")
-                console.log(response)
-                console.log(response.data)
                 if (response.data && ("status" in response.data)) {
                     if (response.data.status == "COMPLETED") {
                         successed = true;
