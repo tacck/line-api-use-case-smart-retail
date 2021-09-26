@@ -3,7 +3,7 @@
  *
  * @param {Object} context
  */
-export default async (context) => {
+ export default async (context) => {
     /** @type {boolean} 初期化済フラグ */
     const inited = context.app.$flash.hold("LIFF_INITED");
 
@@ -16,20 +16,8 @@ export default async (context) => {
         context.store.commit("lineUser", lineUser);
     }
 
-    // vConsole Init
-    const vconsole = new window.VConsole({
-        defaultPlugins: ['system', 'network', 'element', 'storage'],
-        maxLogNumber: 1000,
-        onReady() {
-            console.log('vConsole is ready.')
-        },
-        onClearLog() {
-            console.log('vConsole on clearLog')
-        }
-    })
-
     // LIFF Login & Profile
-    if (inited) {
+    if (inited) { 
         const lineUser = context.store.state.lineUser;
         if (!lineUser || !("expire" in lineUser)) {
             // Get LIFF Profile & Token
@@ -51,7 +39,7 @@ export default async (context) => {
             context.app.i18n.locale = context.store.state.locale;
         } else if (context.store.state.locale) {
             context.app.i18n.locale = context.store.state.locale;
-        }
+        } 
         context.app.$utils.setLocale(context.app.i18n.locale);
         context.app.$smaphregi.utils.setLocale(context.app.i18n.locale);
 
