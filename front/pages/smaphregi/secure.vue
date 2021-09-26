@@ -14,20 +14,13 @@ export default {
         }
     },
     created() {
-        this.initVconsole()
-        console.log('created start')
-        console.log(this.$route.query['transactionId'])
-        console.log(this.$route.query['orderId'])
         if ("transactionId" in this.$route.query && "orderId") {
             // トランザクションID取得
             const transactionId = this.$route.query['transactionId']
-            console.log(transactionId);
             // オーダー番号取得
             const orderId = this.$route.query['orderId'];
-            console.log(orderId);
             // LIFF Login Redirect URL
             const completedRedirectUrl = `${location.protocol}//${location.host}/smaphregi/secure?orderId=${orderId}`;
-            console.log(completedRedirectUrl);
             // 支払完了画面へ遷移
             this.gotoCompleted(transactionId, orderId, completedRedirectUrl);
 
@@ -39,11 +32,9 @@ export default {
             // 商品履歴画面へ遷移
             this.gotoHistory(orderId, loginRedirectUrl);
         }
-        console.log('created end')
     },
     mounted() {
-        //this.initVconsole()
-        //this.$processing.show(1, "");
+        this.$processing.show(1, "");
     },
     destroyed() {
         this.$processing.hide();
@@ -84,21 +75,6 @@ export default {
                 this.$router.push({ path: `/smaphregi/completed/${transactionId}/${orderId}` });
             });
         },
-
-          initVconsole() {
-            /* eslint no-unused-vars: 0 */
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const vconsole = new window.VConsole({
-              defaultPlugins: ['system', 'network', 'element', 'storage'],
-              maxLogNumber: 1000,
-              onReady() {
-                console.log('vConsole is ready.')
-              },
-              onClearLog() {
-                console.log('vConsole on clearLog')
-              }
-            })
-          },
     }
 }
 </script>

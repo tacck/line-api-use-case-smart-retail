@@ -42,7 +42,6 @@ export default {
         ],
         script: [
             { src: 'https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js' },
-            { src: 'https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js' },
         ],
     },
     loading: {
