@@ -24,7 +24,7 @@ function getParameters()
 var params = getParameters();
 var url = "/error.html";
 if (params && ("orderId" in params)) {
-	url = `/smaphregi/secure?orderId=${params['orderId']}`;
+	url = `/smaphregi/secure/?orderId=${params['orderId']}`;
 }
 window.location = url;
 })();
